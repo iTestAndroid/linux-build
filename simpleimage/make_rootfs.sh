@@ -136,11 +136,11 @@ chmod a+x "$DEST/usr/sbin/policy-rc.d"
 
 do_chroot() {
 	mount -o bind /tmp "$DEST/tmp"
-	chroot "$DEST" qemu-aarch64-static /usr/bin/mount -t proc proc /proc
-	chroot "$DEST" qemu-aarch64-static /usr/bin/mount -t sysfs sys /sys
+	chroot "$DEST" mount -t proc proc /proc
+	chroot "$DEST" mount -t sysfs sys /sys
 	chroot "$DEST" $CHROOT_PREFIX "$@"
-	chroot "$DEST" qemu-aarch64-static /usr/bin/umount /sys
-	chroot "$DEST" qemu-aarch64-static /usr/bin/umount /proc
+	chroot "$DEST" umount /sys
+	chroot "$DEST" umount /proc
 	umount "$DEST/tmp"
 }
 
