@@ -125,7 +125,7 @@ echo "OK"
 # Add qemu emulation.
 cp /usr/bin/qemu-aarch64-static "$DEST/usr/bin"
 cp /usr/bin/qemu-arm-static "$DEST/usr/bin"
-echo -ne ":qemu-aarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-aarch64-static:F" > "$DEST/usr/lib/binfmt.d/qemu-aarch64-static.conf"
+#echo -ne ":qemu-aarch64:M::\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xb7\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-aarch64-static:F" > "$DEST/usr/lib/binfmt.d/qemu-aarch64-static.conf"
 
 # Prevent services from starting
 cat > "$DEST/usr/sbin/policy-rc.d" <<EOF
@@ -136,11 +136,11 @@ chmod a+x "$DEST/usr/sbin/policy-rc.d"
 
 do_chroot() {
 	mount -o bind /tmp "$DEST/tmp"
-	chroot "$DEST" mount -t proc proc /proc
-	chroot "$DEST" mount -t sysfs sys /sys
+	chroot "$DEST" qemu-aarch64-static /usr/bin/mount -t proc proc /proc
+	chroot "$DEST" qemu-aarch64-static /usr/bin/mount -t sysfs sys /sys
 	chroot "$DEST" $CHROOT_PREFIX "$@"
-	chroot "$DEST" umount /sys
-	chroot "$DEST" umount /proc
+	chroot "$DEST" qemu-aarch64-static /usr/bin/umount /sys
+	chroot "$DEST" qemu-aarch64-static /usr/bin/umount /proc
 	umount "$DEST/tmp"
 }
 
